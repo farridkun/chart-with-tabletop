@@ -1,0 +1,1 @@
+alert("Made by @Farrid_Jr");
