@@ -1,0 +1,72 @@
+<html>
+  <head>
+    <title>Chart with Tabletop</title>
+    <style>
+        body{
+            background-color: midnightblue;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="container"></div>
+    <div id="chart_div"></div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+    <script type="text/javascript">
+
+      var public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1F9FN1bHQLZOSgWl-ebW15NGum3hFS8keYHjEzvIm2Tk/edit?usp=sharing';
+
+      function init() {
+        Tabletop.init( { key: public_spreadsheet_url,
+                         callback: showInfo,
+                         simpleSheet: true } )
+      }
+
+      function showInfo(data, tabletop) {
+
+        var container = document.querySelector(".container");
+        container.innerHTML = "";
+
+        var doubles = data.map(function(data){
+      
+          var obj = {};
+          obj = [data.Name, Number(data.Amount)];
+          console.log(data.Name);
+          return obj;
+        })
+        
+        drawChart(doubles);
+
+      }
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(init);
+
+      function drawChart(dataStuff) {
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('number', 'Amount');
+      
+        data.addRows(dataStuff);
+
+        var options = {'title':'List Name with Amount',
+                       'width':600,
+                       'height':600,
+                        colors: ['#e0440e', '#e6693e', '#ec8f6e', '#f3b49f', '#f6c7b6'],
+                        titleTextStyle: {color: 'pink', fontSize: 20},
+                        is3D: true,
+                        legendAlignment: 'center',
+                        backgroundColor: 'midnightblue',
+                        legend: {position: 'bottom'},
+                        legendTextStyle: {color: 'pink',
+                        },
+                        legendAlign: 'center'};
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  </body>
+</html>
